@@ -66,7 +66,7 @@ jobs:
          
          cd shaka-bank-project-kubernetes-manifest
          git config --global user.email "shakajimoh23@gmail.com"
-         git config --global user.name "Shaka-Jimoh Musharraf"
+         git config --global user.name "Shaka-Jimoh"
 
          sed -i "s+${{ vars.ECR_REPO }}/shaka-bank-frontend:.*+${{ vars.ECR_REPO }}/shaka-bank-frontend:${{ github.run_number }}+g" ./bank-project/frontend.yaml
 
