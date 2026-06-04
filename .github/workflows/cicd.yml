@@ -57,21 +57,20 @@ jobs:
     runs-on: ubuntu-latest
     needs: Continues-Integration_build_and_push
     steps:
-    - name: Checkout repository.
-      env:
-          GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
-          GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
+    - steps:
+    - name: Checkout k8s manifest repo
+      uses: actions/checkout@v3
+      with:
+        repository: shaka-project-organization/shaka-bank-project-kubernetes-manifest
+        token: ${{ secrets.GIT_PASSWORD }}
+        path: shaka-bank-project-kubernetes-manifest
+
+    - name: Update k8s manifest
       run: |
-         git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/shaka-project-organization/shaka-bank-project-kubernetes-manifest.git
-         
-         cd shaka-bank-project-kubernetes-manifest
-         git config --global user.email "shakajimoh23@gmail.com"
-         git config --global user.name "Shaka-Jimoh M"
-
-         sed -i "s+${{ vars.ECR_REPO }}/shaka-bank-frontend:.*+${{ vars.ECR_REPO }}/shaka-bank-frontend:${{ github.run_number }}+g" ./bank-project/frontend.yaml
-
-         cat ./bank-project/frontend.yaml | grep -q "${{ vars.ECR_REPO }}/shaka-bank-frontend:${{ github.run_number }}"
-
-         git add bank-project/frontend.yaml
-         git commit -m "Update frontend image to version ${{ github.run_number }}"
-         git push origin main
+        cd shaka-bank-project-kubernetes-manifest
+        git config --global user.email "shakajimoh23@gmail.com"
+        git config --global user.name "Shaka-Jimoh"
+        sed -i "s+${{ vars.ECR_REPO }}/shaka-bank-frontend:.*+${{ vars.ECR_REPO }}/shaka-bank-frontend:${{ github.run_number }}+g" ./bank-project/frontend.yaml
+        git add bank-project/frontend.yaml
+        git commit -m "Update frontend image to version ${{ github.run_number }}"
+        git push
