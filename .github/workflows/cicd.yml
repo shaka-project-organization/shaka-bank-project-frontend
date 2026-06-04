@@ -62,7 +62,7 @@ jobs:
           GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
           GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
       run: |
-         git clone https://${{ secrets.GIT_USERNAME }}:${{ secrets.GIT_PASSWORD }}@github.com/shaka-project-organization/shaka-bank-project-kubernetes-manifest.git
+         git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/shaka-project-organization/shaka-bank-project-kubernetes-manifest.git
          
          cd shaka-bank-project-kubernetes-manifest
          git config --global user.email "shakajimoh23@gmail.com"
