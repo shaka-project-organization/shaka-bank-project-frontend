@@ -57,17 +57,18 @@ jobs:
     runs-on: ubuntu-latest
     needs: Continues-Integration_build_and_push
     steps:
+
     - name: Checkout repository
       env:
-          GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
+        GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
       run: |
-        git clone https://x-access-token:${GIT_PASSWORD}@github.com/shaka-project-organization/shaka-bank-project-kubernetes-manifest.git 
-        cd shaka-bank-project-kubernetes-manifest
-        git config --global user.email "shakajimoh23@gmail.com"
-        git config --global user.name "Shaka m"
-        sed -i "s+${{ vars.ECR_REPO }}/shaka-bank-frontend:.*+${{ vars.ECR_REPO }}/shaka-bank-frontend:${{ github.run_number }}+g" ./bank-project/frontend.yaml
-        cat ./bank-project/frontend.yaml | grep -q "${{ vars.ECR_REPO }}/shaka-bank-frontend:${{ github.run_number }}"
-        git add bank-project/frontend.yaml
-        git commit -m "Update frontend image to version ${{ github.run_number }}"
-        git push origin main
-   
+         git config --global credential.helper store
+         echo "https://engrshakacloud:${GIT_PASSWORD}@github.com" > ~/.git-credentials
+         git clone https://github.com/shaka-project-organization/shaka-bank-project-kubernetes-manifest.git
+         cd shaka-bank-project-kubernetes-manifest
+         git config --global user.email "shakajimoh23@gmail.com"
+         git config --global user.name "Shaka"
+         sed -i "s+467508858835.dkr.ecr.us-east-1.amazonaws.com/shaka-bank-frontend:.*+467508858835.dkr.ecr.us-east-1.amazonaws.com/shaka-bank-frontend:${{ github.run_number }}+g" ./bank-project/frontend.yaml
+         git add bank-project/frontend.yaml
+         git diff --cached --quiet || git commit -m "Update frontend image to version ${{ github.run_number }}"
+         git push origin main    
